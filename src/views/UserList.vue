@@ -10,16 +10,18 @@
                        placeholder="Search users..."
                        v-model="searchQuery">
             </div>
-            <transition-group name="list" class="flex flex-wrap">
+            <transition mode="out-in" name="fade">
+                <transition-group v-if="!displayNoData" name="list" class="flex flex-wrap" key="data">
                     <div v-for="user in filteredUsers"
                          :key="user.id"
                          class="w-full lg:w-1/2 p-4">
                         <user-card v-bind:user="user"></user-card>
                     </div>
-            </transition-group>
-            <no-data v-if="displayNoData" class="w-full mt-8">
-                Could not find users matching "{{searchQuery}}"
-            </no-data>
+                </transition-group>
+                <no-data v-if="displayNoData" class="w-full mt-8" key="no-data">
+                    Could not find users matching "{{searchQuery}}"
+                </no-data>
+            </transition>
         </div>
     </div>
 </template>
@@ -73,5 +75,12 @@
     }
     .list-move {
         transition: transform .3s;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .2s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
     }
 </style>
