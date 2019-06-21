@@ -14,30 +14,7 @@
                 <div v-for="user in filteredUsers"
                      :key="user.id"
                      class="w-full lg:w-1/2 p-4">
-                    <div class="bg-white shadow-xl rounded-lg flex items-center p-4">
-                        <user-avatar v-bind:name="user.name"
-                                     class="rounded-full h-20 mr-4">
-                        </user-avatar>
-                        <div>
-                            <h1 class="text-xl text-gray-700">{{user.name}}</h1>
-                            <a v-bind:href="user.website" class="text-purple-600 hover:text-purple-800 cursor-pointer"
-                               target="_blank"
-                               rel="noopener">
-                                {{user.website}}
-                            </a>
-                            <br>
-                            <a v-bind:href="`mailto:${user.email}`" class="text-gray-600 text-sm cursor-pointer">
-                                {{user.email}}
-                            </a>
-                            <br>
-                            <a v-bind:href="getGoogleMapsLink(user)"
-                               target="_blank"
-                               rel="noopener"
-                               class="text-gray-600 text-sm cursor-pointer">
-                                {{user.address.street}} {{user.address.suite}}, {{user.address.city}}
-                            </a>
-                        </div>
-                    </div>
+                    <user-card v-bind:user="user"></user-card>
                 </div>
                 <no-data v-if="displayNoData" class="w-full mt-8">
                     Could not find users matching "{{searchQuery}}"
@@ -48,14 +25,15 @@
 </template>
 
 <script>
-  import UserAvatar from '../components/UserAvatar'
   import NoData from '../components/NoData'
+  import UserCard from '../components/UserCard'
+  import UserService from '../services/UserService'
 
   export default {
     name: 'user-list',
     components: {
-      UserAvatar,
-      NoData
+      NoData,
+      UserCard
     },
     data() {
       return {
@@ -77,15 +55,8 @@
         return this.filteredUsers.length === 0 && this.searchQuery
       }
     },
-    methods: {
-      getGoogleMapsLink(user) {
-        let { lat, lng } = user.address.geo
-        return `https://maps.google.com/?q=${lat},${lng}`
-      }
-    },
     mounted() {
-      fetch('https://jsonplaceholder.typicode.com/users')
-        .then(res => res.json())
+      UserService.getUsers()
         .then(res => {
           this.users = res
         })
