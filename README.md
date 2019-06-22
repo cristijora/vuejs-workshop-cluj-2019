@@ -1,5 +1,7 @@
 # cluj-2019-06-22-demo
 
+[Live demo](https://vuejs-cluj-workshop-2019.netlify.com/#/)
+
 ## Project setup
 ```
 yarn install
