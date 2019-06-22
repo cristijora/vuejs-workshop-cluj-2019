@@ -67,7 +67,10 @@
 </script>
 <style>
     .list-enter-active, .list-leave-active {
-        transition: all .3s;
+        transition: all .4s;
+    }
+    .list-leave-active {
+        position: absolute;
     }
     .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
         opacity: 0;
